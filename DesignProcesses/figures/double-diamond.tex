@@ -1,0 +1,22 @@
+\documentclass[]{standalone}
+
+\usepackage{tikz}
+\usepackage{arev}
+\usepackage{arevmath}
+\usepackage{arevtext}
+
+\begin{document}
+\small
+\begin{tikzpicture}[scale=3]
+  \draw[fill=black] (0,0) circle (0.05);
+  \draw[fill=black] (1,0) circle (0.05);
+  \draw[fill=black] (2,0) circle (0.05);
+  \draw[] (0,0) -- (0.5,0.5) -- (1,0) -- (1.5,0.5) -- (2,0);
+  \draw[] (0,0) -- (0.5,-0.5) -- (1,0) -- (1.5,-0.5) -- (2,0);
+
+  \node[align=center] at (0.25,-0.75) {Discover};
+  \node[align=center] at (0.75,-0.75) {Define};
+  \node[align=center] at (1.25,-0.75) {Develop};
+  \node[align=center] at (1.75,-0.75) {Deliver};
+\end{tikzpicture}
+\end{document}

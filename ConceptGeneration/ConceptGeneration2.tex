@@ -1,0 +1,56 @@
+\documentclass[20pt, a0paper, portrait]{tikzposter}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage{textcomp}
+\usepackage{arev}
+\usepackage{arevmath}
+\usepackage{arevtext}
+\usepackage{graphicx}
+\usepackage{wrapfig}
+\usepackage{microtype}
+\usepackage{subfig}
+
+% Bibliography
+\usepackage[backend=biber,
+bibencoding=utf8,
+bibstyle=numeric-comp,
+%style=verbose, %verbose-ibid,
+url=true, % include url in reference
+doi=true, % include doi in reference
+sorting=none, % sorting of citations
+%autocite=superscript, % autocite becomes superscript
+maxcitenames=1, % Max names displayed when citing in text
+maxbibnames=10, % Max number of names displayed in the bibliography
+giveninits=true % Use initials
+]{biblatex}
+\addbibresource{citations.bib}
+\renewcommand*{\bibfont}{\footnotesize}
+
+\title{Concept Generation Continued}
+\author{Engineering Design \& Manufacture Group}
+\date{\today}
+\institute{University of Bath, UK}
+
+\usetheme{Default}
+\usecolorstyle[colorPalette=GreenGrayViolet]{Default}
+\useblockstyle{Default}
+\usetitlestyle{Filled}
+
+\begin{document}
+
+\maketitle
+
+\block[]{Theory of Inventive Problem Solving (TIPS/TRIZ)}{
+
+  \begin{tikzfigure}[40 principles of invention]
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/triz.jpg}
+    \label{fig-triz}
+  \end{tikzfigure}
+
+}
+
+
+\end{document}

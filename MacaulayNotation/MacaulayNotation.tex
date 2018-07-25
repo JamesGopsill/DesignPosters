@@ -1,0 +1,239 @@
+\documentclass[20pt, a0paper, portrait]{tikzposter}
+
+  \usepackage[utf8]{inputenc}
+  \usepackage[T1]{fontenc}
+  \usepackage{textcomp}
+  \usepackage{arev}
+  \usepackage{arevmath}
+  \usepackage{arevtext}
+  \usepackage{amsmath}
+  \usepackage{amssymb}
+  \usepackage{graphicx}
+  \usepackage{wrapfig}
+  \usepackage{microtype}
+  \usepackage{tikz}
+  \usepackage{multicol}
+  \usepackage{pgfplots}
+  \pgfplotsset{compat = 1.3}
+  \usepackage[detect-all]{siunitx} % unit declarations
+  \usetikzlibrary{arrows.meta}
+  
+  % Bibliography
+  \usepackage[backend=biber,
+  bibencoding=utf8,
+  bibstyle=numeric-comp,
+  %style=verbose, %verbose-ibid,
+  url=true, % include url in reference
+  doi=true, % include doi in reference
+  sorting=none, % sorting of citations
+  %autocite=superscript, % autocite becomes superscript
+  maxcitenames=1, % Max names displayed when citing in text
+  maxbibnames=10, % Max number of names displayed in the bibliography
+  giveninits=true % Use initials
+  ]{biblatex}
+  \addbibresource{citations.bib}
+
+  \renewcommand*{\bibfont}{\footnotesize}
+  \renewcommand*\familydefault{\sfdefault}
+  
+  \title{Macaulay Notation}
+  \author{Engineering Design \& Manufacture Group}
+  \date{\today}
+  \institute{University of Bath, UK}
+  
+  \usetheme{Default}
+  \usecolorstyle[colorPalette=GreenGrayViolet]{Default}
+  \useblockstyle{Default}
+  \usetitlestyle{Filled}
+    
+  \begin{document}
+  
+  \maketitle
+  
+  \begin{columns}
+    \column{0.5}
+      \block[]{Free Body Diagrams}{
+
+        Free body diagrams are a method of communicating the application and direction of forces through an object. The objective is to simplify the geometry of object to a point where one can easily see how the forces within the object interact with one another. It is also common practice to take planes in which the forces are acting to reduce the complexity of the force profiles further. \\~\\
+
+        Figure~\ref{fig-1} shows an example of a loaded beam with forces in the vertical direction being reacted by two bearings. The $+$ arrow indicates our sign convention on the drawing and relative positions of the forces indicated.
+
+        \begin{tikzfigure}[Free Body Diagram]\label{fig-1}
+          \begin{tikzpicture}[scale=20.0]
+            \draw[very thick] (0,0) -- (1,0);
+            
+            \draw[<-, thick] (0.2,0) -- (0.2,-0.1) node[below]{$R_{1v}$};
+            \draw[<-, thick] (0.8,0) -- (0.8,-0.1) node[below]{$R_{2v}$};
+            
+            \draw[<-, thick] (0.3,0) -- (0.3,0.1) node[above]{$F_{1}$};
+            \draw[<-, thick] (0.7,0) -- (0.7,0.1) node[above]{$F_{2}$};
+            
+            \draw[->] (0,-0.25) -- (0.2,-0.25) node[right]{$x_1$};
+            \draw[->] (0,-0.3) -- (0.3,-0.3) node[right]{$x_2$};
+            \draw[->] (0,-0.35) -- (0.7,-0.35) node[right]{$x_3$};
+            \draw[->] (0,-0.4) -- (0.8,-0.4) node[right]{$x_4$};
+            \draw[] (0,-0.25) -- (0,-0.4);
+            
+            \draw[|->] (0,0.1) -- (0,0.2) node[above]{$+$};
+          \end{tikzpicture}
+        \end{tikzfigure}
+      }
+
+      \block[]{Calculating the Reaction Forces}{
+        Using these diagrams and information on the forces and location of the forces, one can ascertain the reactions on the bearings.\\~\\
+
+        \begin{multicols}{2}
+        \begin{description}
+          \item[$F_1=$] 15\si{\kilo\newton}
+          \item[$F_2=$] 25\si{\kilo\newton}
+          \item[$R_{1v}=$] ?
+          \item[$R_{2v}=$] ?
+          \item[$x_1=$] 0.2\si{\metre}
+          \item[$x_2=$] 0.3\si{\metre}
+          \item[$x_3=$] 0.55\si{\metre}
+          \item[$x_4=$] 0.6\si{\metre}
+        \end{description}
+        \end{multicols}
+
+        To resolve the force vertically, we take moments about one of the bearings with the assumption that it is a static and stable system. Thus, no moment should exist about the bearing otherwise the beam would be spinning!\\~\\
+
+        Here, we have taken moments about $R_{1v}$ and from this, we can calculate the reaction force $R_{2v}$. 
+
+        \begin{align}
+          \circlearrowright R_{1v} &= 0 = 0.1\si{\metre}(15\si{\kilo\newton}) + 0.35\si{\metre}(25\si{\kilo\newton}) - 0.4(R_{2v}) \\
+          R_{2v} &= \frac{1025\si{\kilo\newton\metre}}{0.4\si{\metre}} = 25.625\si{\kilo\newton}
+        \end{align}
+
+        With $R_{2v}$ calculated, we can look at the balancing the forces in the vertical plane to ascertain $R_{1v}$.
+
+        \begin{align}
+          R_{1v}+R_{v2}&=F_1+F_2\\
+          R_{1v}+R_{v2}&=15\si{\kilo\newton}+25\si{\kilo\newton}\\
+          R_{1v} &= 40\si{\kilo\newton}-25.625\si{\kilo\newton} = 14.375\si{\kilo\newton}
+        \end{align}
+
+      }
+      \block[]{Macaulay Notation}{
+        Macaulay Notation is a method used for the structural analysis of Euler-Bernoulli beams and describes the beam forces, moments and deflection. The method is particularly useful for discontinuous and/or discrete loading scenarios as well as loadings that are uniformly distributed loads (u.d.l.) and/or uniformly varying loads (u.v.l.) over the span of a beam.\\~\\
+
+        The method starts with the Euler-Bernoulli beam theory and the relation between the deflection $w$ and bending moment $M$.
+
+        \begin{equation}
+          \pm EI\frac{\text{d}^2 w}{\text{d}x^2} = M
+        \end{equation}
+
+        \noindent Where $E$ is the elastic modulus and $I$ is the second moment of area.\\~\\
+
+        In terms of Macaulay Notation, $M$ is expressed in the form:
+
+        \begin{equation}
+          M = M_1(x) + P_1\langle x-a_1\rangle^{b_1} + P_2\langle x-a_2\rangle^{b_2} + P_3\langle x-a_3\rangle^{b_3} + \ldots
+        \end{equation}
+
+        \noindent Where $M_1$ is the moment at the start of $x$ and $P_i\langle x-a_i\rangle^{b_i}$ representing elements along the beam that contribute to the moment. These contribute to the scenario when $x$ becomes greater than $a_i$:
+
+        \begin{equation}
+          \langle x - a_i\rangle = 
+          \begin{cases} 
+            0 & \mathrm{if}~ x < a_i \\ 
+            x - a_i & \mathrm{if}~ x > a_i 
+          \end{cases}
+        \end{equation}
+
+        \noindent $b_i$ is determined by the type of loading that is being applied. 
+      }
+    \column{0.5}
+    \block[]{Shear in Macaulay Notation}{
+      For the shaft design exercise, you will be take the shear forces and integrating them to get your bending moments for the two axes. For example, the Macaulay Notation for Free Body Diagram in Figure~\ref{fig-1} is as follows:\\~\\
+
+      \begin{equation}
+        S_v = R_{v1}\langle x-x_1\rangle^0 + F_{1}\langle x-x_2\rangle^0 + F_{2}\langle x-x_3\rangle^0 + R_{v2}\langle x-x_4\rangle^0
+      \end{equation}\\~\\
+
+      This can be evaluated to produce shear force diagrams for the forces (Figure~\ref{fig-shear}).\\~\\
+
+      \begin{tikzfigure}[Shear Force Diagram]\label{fig-shear}
+        \begin{tikzpicture}
+          \begin{axis}[
+            width=0.3\textwidth,
+            xlabel = Shaft Length (\si{\metre}),
+            ylabel = Shear Force (\si{\kilo\newton}),
+            ylabel shift = 10pt,
+            xlabel shift = 10pt,
+            ytick = {-20,-15,-10,-5,0,5,10,15,20},
+            xtick = {0.0,0.2,0.4,0.6},
+            %xticklabel={$\mathsf{\pgfmathprintnumber{\tick}}$},
+            %yticklabel={$\mathsf{\pgfmathprintnumber{\tick}}$},
+            legend style={at={(0.97,0.97)},anchor=north east} % , font=\tiny},
+            legend cell align=left
+            ]
+  
+          \addplot[color=black, dotted, very thick] coordinates {
+            (0,0)
+            (0.6,0)
+          };
+  
+          \addplot[color=black, very thick] coordinates {
+            (0,0)
+            (0.2,0)
+            (0.2, 14.375)
+            (0.3, 14.375)
+            (0.3, -0.625)
+            (0.55, -0.625)
+            (0.55, -25.625)
+            (0.6, -25.625)
+            (0.6, 0)
+          };
+  
+          \legend{Zero Line, Vertical}
+  
+          \end{axis}
+        \end{tikzpicture}
+      \end{tikzfigure}
+    }
+
+    \block[]{Bending Moment in Macaulay Notation}{
+
+      Having described the shear forces in Macaulay Notation, it is then the case of integrating and determining the constant of integration to arrive at an equation that describes the bending moment at any point through the beam.\\~\\
+
+      \begin{equation}
+        M_v = \int S_v = R_{v1}\langle x-x_1\rangle^1 + F_{1}\langle x-x_2\rangle^1  + F_{2}\langle x-x_3\rangle^1 + R_{v2}\langle x-x_4\rangle^1
+      \end{equation}\\~\\
+
+      This can be evaluated to provide the bending moment diagram.\\~\\
+
+      \begin{tikzfigure}[Bending Moment Diagram]\label{fig-bending}
+        \begin{tikzpicture}
+          \begin{axis}[
+            width=0.3\textwidth,
+            xlabel = Shaft Length (\si{\metre}),
+            ylabel = Bending Moment (\si{\kilo\newton\metre}),
+            ylabel shift = 10pt,
+            xlabel shift = 10pt,
+            %ytick = {0,0.2,0.4,0.,20},
+            xtick = {0.0,0.2,0.4,0.6},
+            %xticklabel={$\mathsf{\pgfmathprintnumber{\tick}}$},
+            %yticklabel={$\mathsf{\pgfmathprintnumber{\tick}}$},
+            legend style={at={(0.03,0.97)},anchor=north west},. %, font=\tiny},
+            legend cell align=left
+            ]
+          \addplot[color=black, dotted] coordinates {
+            (0,0)
+            (0.6,0)
+          };
+          \addplot[color=black] coordinates {
+            (0,0)
+            (0.2,0)
+            (0.3, 1.44)
+            (0.55, 1.28)
+            (0.6, 0)
+          };
+          \legend{Zero Line, Vertical}
+          \end{axis}
+        \end{tikzpicture}
+      \end{tikzfigure}
+
+    }
+  \end{columns}
+  
+  \end{document}
